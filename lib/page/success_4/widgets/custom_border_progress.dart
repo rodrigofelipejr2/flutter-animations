@@ -1,28 +1,32 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-import '../../../../utils/constants.dart';
-import '../../../../shared/widgets/progress_border.dart';
-import 'circle_body_widget.dart';
+import '../../../shared/widgets/progress_border.dart';
+import '../../../utils/constants.dart';
 
-class CircleBorderWidget extends StatefulWidget {
+class CustomBorderProgress extends StatefulWidget {
   final double size;
+  final VoidCallback onEnd;
+  final Color color;
 
-  const CircleBorderWidget({
+  const CustomBorderProgress({
     Key? key,
     required this.size,
+    required this.onEnd,
+    required this.color,
   }) : super(key: key);
 
   @override
-  State<CircleBorderWidget> createState() => _CircleBorderWidgetState();
+  State<CustomBorderProgress> createState() => _CustomBorderProgressState();
 }
 
-class _CircleBorderWidgetState extends State<CircleBorderWidget> with SingleTickerProviderStateMixin {
+class _CustomBorderProgressState extends State<CustomBorderProgress> with SingleTickerProviderStateMixin {
   late final animationController = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 450),
+    duration: const Duration(milliseconds: 1000),
   );
   late Animation<double> valueAnimation;
-  int circleSize = 1;
 
   @override
   void initState() {
@@ -32,14 +36,14 @@ class _CircleBorderWidgetState extends State<CircleBorderWidget> with SingleTick
 
     valueAnimation = Tween(
       begin: 0.0,
-      end: 1.0,
+      end: 0.7,
     ).animate(CurvedAnimation(
       parent: animationController,
       curve: Curves.easeOutCubic,
     ));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 1000), () {
         if (mounted) animationController.forward();
       });
     });
@@ -52,47 +56,41 @@ class _CircleBorderWidgetState extends State<CircleBorderWidget> with SingleTick
     super.dispose();
   }
 
-  void restartAnimationBorder() {
-    if (animationController.status == AnimationStatus.forward || animationController.value >= 1) {
-      setState(() {
-        circleSize = 0;
-      });
-    } else {
-      setState(() {
-        animationController.forward();
-      });
+  void listenerAnimationStatus(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      animationController.reverse();
+    } else if (status == AnimationStatus.dismissed) {
+      widget.onEnd();
     }
   }
 
-  void listenerAnimationStatus(AnimationStatus status) {
-    if ([AnimationStatus.completed, AnimationStatus.dismissed].contains(status)) {
-      restartAnimationBorder();
-    }
-  }
+  static const double _strokeHeadInterval = 0.33;
+
+  late final Animatable<double> _additionalRotationTween = TweenSequence<double>(
+    <TweenSequenceItem<double>>[
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0.0, end: 4.0),
+        weight: _strokeHeadInterval,
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Transform.rotate(
+      angle: math.pi * _additionalRotationTween.transform(valueAnimation.value),
+      filterQuality: FilterQuality.high,
       child: Container(
         width: widget.size,
         height: widget.size,
         decoration: BoxDecoration(
-          color: Constants.greenBack,
+          color: Constants.transparent,
           shape: BoxShape.circle,
           border: ProgressBorder.all(
-            color: Constants.greenLine,
+            color: widget.color,
             width: widget.size * 0.05,
             progress: valueAnimation.value,
           ),
-        ),
-        child: CircleBodyWidget(
-          size: widget.size * circleSize,
-          referenceSize: widget.size,
-          onEnd: () {
-            setState(() {
-              circleSize = 0;
-            });
-          },
         ),
       ),
     );

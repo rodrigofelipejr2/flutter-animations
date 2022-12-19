@@ -10,4 +10,8 @@ class Constants {
   static const Color background = Color(0xFFF7F5F2);
   static const Color transparent = Color(0x00000000);
   static const Color black = Color(0xFF000000);
+  static const Color iOrange = Color(0XFFF07D06);
+  static const Color iGreen = Color(0XFF2C9363);
+  static const Color iDarkGreen = Color(0XFF1F6C4F);
+  static const Color iWhite = Color(0XFFFFFFFF);
 }

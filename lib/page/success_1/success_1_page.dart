@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/success_body_widget.dart';
-import '../widgets/success_header_widget.dart';
+import 'widgets/success_body_widget.dart';
+import 'widgets/success_header_widget.dart';
 
 class Success1Page extends StatelessWidget {
   const Success1Page({Key? key}) : super(key: key);

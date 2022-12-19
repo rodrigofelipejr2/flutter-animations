@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_success_page/shared/widgets/delayed_display.dart';
+import 'package:flutter_application_success_page/utils/constants.dart';
 
-import '../success_1/widgets/circle/circle_animated.dart';
-import '../success_1/widgets/circle/delayed_display.dart';
-import '../../utils/constants.dart';
+import 'circle/circle_animated.dart';
 
 class SuccessHeaderWidget extends StatelessWidget {
   const SuccessHeaderWidget({Key? key}) : super(key: key);

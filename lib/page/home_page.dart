@@ -22,6 +22,28 @@ class HomePage extends StatelessWidget {
                 onPressed: () => Navigator.of(context).pushNamed('/success2'),
                 child: const Text('Success Page 2'),
               ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed('/success3'),
+                child: const Text('Success Page 3'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator.of(context).push(PageRouteBuilder(
+                  //     pageBuilder: (context, animation, anotherAnimation) {
+                  //       return ReturnPage();
+                  //     },
+                  //     transitionDuration: Duration(milliseconds: 2000),
+                  //     transitionsBuilder: (context, animation, anotherAnimation, child) {
+                  //       animation = CurvedAnimation(curve: curveList[index], parent: animation);
+                  //       return RotationTransition(
+                  //         turns: animation,
+                  //         child: child,
+                  //       );
+                  //     }));
+                  Navigator.of(context).pushNamed('/success4');
+                },
+                child: const Text('Success Page 4'),
+              ),
             ],
           ),
         ),
